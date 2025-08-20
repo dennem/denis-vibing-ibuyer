@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useLocation } from 'react-router-dom'
 
 const LanguageSwitcher = () => {
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -47,7 +47,7 @@ const LanguageSwitcher = () => {
     <button
       onClick={toggleLanguage}
       className="flex items-center space-x-2 px-3 py-2 text-sm text-white hover:bg-blue-500 rounded transition duration-200"
-      title={i18n.language === 'en' ? 'Switch to Thai' : 'เปลี่ยนเป็นภาษาอังกฤษ'}
+      title={t('navigation.switchLanguage')}
     >
       <span className="text-lg">
         {i18n.language === 'en' ? '🇹🇭' : '🇺🇸'}

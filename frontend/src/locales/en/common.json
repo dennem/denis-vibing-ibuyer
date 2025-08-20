@@ -5,7 +5,8 @@
     "login": "Login",
     "register": "Register",
     "logout": "Logout",
-    "welcomeBack": "Welcome back, {{name}}!"
+    "welcomeBack": "Welcome back, {{name}}!",
+    "switchLanguage": "Switch to Thai"
   },
   "hero": {
     "title": "Sell Your Property in Thailand Fast",

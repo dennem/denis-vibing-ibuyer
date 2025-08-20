@@ -1,5 +1,8 @@
 from fastapi import FastAPI, Depends, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 from typing import List
@@ -10,24 +13,29 @@ from database import get_db, Base, engine
 from models import PropertyApplicationCreate, PropertyApplicationResponse, UserCreate, UserResponse, PropertySubmissionWithRegistration
 from auth import get_current_user, create_access_token, verify_password, get_password_hash
 from crud import create_user, get_user_by_email, create_property_application, get_user_applications
+from config import settings
 import secrets
 import string
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="IBuyer API", version="1.0.0")
+app = FastAPI(title=settings.APP_NAME, version=settings.APP_VERSION)
 
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # React dev server
+    allow_origins=[settings.FRONTEND_URL],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 security = HTTPBearer()
+
+# Check if we should serve static files (production mode)
+STATIC_FILES_PATH = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
+SERVE_STATIC = os.path.exists(STATIC_FILES_PATH) and settings.is_production
 
 def generate_password(length: int = 12) -> str:
     """Generate a random password"""
@@ -138,6 +146,8 @@ def submit_property_with_registration(
     # Create property application
     property_data = PropertyApplicationCreate(
         property_type=submission.property_type,
+        project_name=submission.project_name,
+        province=submission.province,
         property_address=submission.property_address,
         property_size_sqm=submission.property_size_sqm,
         bedrooms=submission.bedrooms,
@@ -178,5 +188,15 @@ async def upload_documents(
     # TODO: Implement file upload logic
     return {"message": f"Uploaded {len(files)} documents for application {application_id}"}
 
+# Serve static files in production
+if SERVE_STATIC:
+    app.mount("/assets", StaticFiles(directory=os.path.join(STATIC_FILES_PATH, "assets")), name="assets")
+    
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        """Serve the React SPA for all non-API routes"""
+        # Serve index.html for all routes (React will handle routing)
+        return FileResponse(os.path.join(STATIC_FILES_PATH, "index.html"))
+
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host=settings.HOST, port=settings.PORT)

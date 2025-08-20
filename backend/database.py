@@ -92,12 +92,13 @@ class PropertyPhoto(Base):
     # Relationship
     application = relationship("PropertyApplication", back_populates="photos")
 
-# Database connection - using SQLite for development
-SQLALCHEMY_DATABASE_URL = "sqlite:///./ibuyer.db"
+from config import settings
+
+# Database connection - using PostgreSQL
+SQLALCHEMY_DATABASE_URL = settings.DATABASE_URL
 
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL,
-    connect_args={"check_same_thread": False}  # SQLite specific
+    SQLALCHEMY_DATABASE_URL
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
