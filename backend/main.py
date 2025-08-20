@@ -246,10 +246,10 @@ def flower_redirect():
 def flower_info():
     """Get Flower access information - open access"""
     return {
-        "message": "Flower monitoring is available",
+        "message": "Flower monitoring is running",
         "local_url": "http://localhost:5555",
         "production_url": "/admin/flower/",
-        "note": "Set ENABLE_FLOWER=true to enable in production"
+        "note": "Flower runs automatically - no configuration needed"
     }
 
 # Serve static files in production

@@ -7,11 +7,10 @@ import subprocess
 import threading
 
 def start_flower_in_background():
-    """Start Flower in a background thread"""
+    """Start Flower in a background thread - always runs"""
     def run_flower():
         try:
             # Run Flower on port 5555 (internal port)
-            # Note: Flower itself runs without auth, we handle it in FastAPI
             subprocess.run([
                 "celery", "-A", "celery_app", "flower",
                 "--port=5555",
@@ -20,8 +19,7 @@ def start_flower_in_background():
         except Exception as e:
             print(f"Flower failed to start: {e}")
     
-    # Only start in production or when explicitly enabled
-    if os.getenv("ENABLE_FLOWER", "false").lower() == "true":
-        thread = threading.Thread(target=run_flower, daemon=True)
-        thread.start()
-        print("Flower monitoring started at /admin/flower")
+    # Always start Flower - no env variable needed
+    thread = threading.Thread(target=run_flower, daemon=True)
+    thread.start()
+    print("Flower monitoring started at /admin/flower (port 5555)")
