@@ -20,11 +20,15 @@ import string
 # Import Celery app and task
 from celery_app import celery_app  # Import the configured Celery instance
 from tasks.email import send_property_submission_email
+from flower_app import start_flower_in_background, verify_flower_credentials
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title=settings.APP_NAME, version=settings.APP_VERSION)
+
+# Start Flower monitoring if enabled
+start_flower_in_background()
 
 # CORS middleware
 # In production with monolithic deployment, CORS isn't needed for same-origin requests
@@ -225,6 +229,30 @@ async def upload_documents(
 ):
     # TODO: Implement file upload logic
     return {"message": f"Uploaded {len(files)} documents for application {application_id}"}
+
+@app.get("/admin/flower")
+def flower_redirect(username: str = Depends(verify_flower_credentials)):
+    """Redirect to Flower UI with basic auth"""
+    import os
+    from fastapi.responses import RedirectResponse
+    
+    # In production, Flower runs on same host
+    if settings.is_production:
+        return RedirectResponse(url="/admin/flower/")
+    else:
+        # Local development - Flower runs on different port
+        return RedirectResponse(url="http://localhost:5555")
+
+@app.get("/admin/flower-info")
+def flower_info(username: str = Depends(verify_flower_credentials)):
+    """Get Flower access information"""
+    return {
+        "message": "Flower monitoring is available",
+        "local_url": "http://localhost:5555",
+        "production_url": "/admin/flower/",
+        "authenticated_as": username,
+        "note": "Set ENABLE_FLOWER=true to enable in production"
+    }
 
 # Serve static files in production
 # IMPORTANT: This must be at the END of the file, after all API routes are defined
