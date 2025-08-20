@@ -4,6 +4,7 @@ anyio==4.10.0
 bcrypt==4.0.1
 celery==5.3.4
 cffi==1.17.1
+flower==2.0.1
 click==8.2.1
 cryptography==45.0.6
 ecdsa==0.19.1
