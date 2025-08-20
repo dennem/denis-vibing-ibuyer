@@ -20,7 +20,7 @@ import string
 # Import Celery app and task
 from celery_app import celery_app  # Import the configured Celery instance
 from tasks.email import send_property_submission_email
-from flower_app import start_flower_in_background, verify_flower_credentials
+from flower_app import start_flower_in_background
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -231,9 +231,8 @@ async def upload_documents(
     return {"message": f"Uploaded {len(files)} documents for application {application_id}"}
 
 @app.get("/admin/flower")
-def flower_redirect(username: str = Depends(verify_flower_credentials)):
-    """Redirect to Flower UI with basic auth"""
-    import os
+def flower_redirect():
+    """Redirect to Flower UI - open access"""
     from fastapi.responses import RedirectResponse
     
     # In production, Flower runs on same host
@@ -244,13 +243,12 @@ def flower_redirect(username: str = Depends(verify_flower_credentials)):
         return RedirectResponse(url="http://localhost:5555")
 
 @app.get("/admin/flower-info")
-def flower_info(username: str = Depends(verify_flower_credentials)):
-    """Get Flower access information"""
+def flower_info():
+    """Get Flower access information - open access"""
     return {
         "message": "Flower monitoring is available",
         "local_url": "http://localhost:5555",
         "production_url": "/admin/flower/",
-        "authenticated_as": username,
         "note": "Set ENABLE_FLOWER=true to enable in production"
     }
 
