@@ -17,7 +17,8 @@ from config import settings
 import secrets
 import string
 
-# Import Celery task
+# Import Celery app and task
+from celery_app import celery_app  # Import the configured Celery instance
 from tasks.email import send_property_submission_email
 
 # Create database tables
@@ -183,9 +184,9 @@ def submit_property_with_registration(
     email_data = {
         'email': submission.email,
         'full_name': submission.full_name,
-        'property_type': submission.property_type,
+        'property_type': str(submission.property_type),  # Convert to string for JSON serialization
         'property_address': submission.property_address,
-        'asking_price': submission.asking_price,
+        'asking_price': float(submission.asking_price),  # Ensure it's a float
         'new_user': existing_user is None,
     }
     

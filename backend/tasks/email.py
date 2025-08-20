@@ -2,12 +2,12 @@
 Email task for property submission
 Just one task - send email after property is submitted
 """
-from celery import shared_task
+from celery_app import celery_app  # Import our configured Celery app
 import logging
 
 logger = logging.getLogger(__name__)
 
-@shared_task(bind=True, max_retries=3)
+@celery_app.task(bind=True, max_retries=3)  # Use our app's task decorator, not shared_task
 def send_property_submission_email(self, submission_data: dict):
     """
     Send email after property submission
