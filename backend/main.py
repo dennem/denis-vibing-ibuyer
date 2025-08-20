@@ -34,7 +34,10 @@ app.add_middleware(
 security = HTTPBearer()
 
 # Check if we should serve static files (production mode)
-STATIC_FILES_PATH = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
+# In Docker, frontend dist is at /app/frontend/dist
+STATIC_FILES_PATH = os.environ.get("STATIC_PATH", os.path.join(os.path.dirname(__file__), "..", "frontend", "dist"))
+if not os.path.exists(STATIC_FILES_PATH) and os.path.exists("/app/frontend/dist"):
+    STATIC_FILES_PATH = "/app/frontend/dist"
 SERVE_STATIC = os.path.exists(STATIC_FILES_PATH) and settings.is_production
 
 def generate_password(length: int = 12) -> str:
