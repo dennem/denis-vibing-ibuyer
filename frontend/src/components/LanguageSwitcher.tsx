@@ -19,12 +19,19 @@ const LanguageSwitcher = () => {
     
     // Build new path
     let newPath = ''
-    if (newLang === 'en') {
-      // Add /en prefix for English
-      newPath = '/en' + (pathSegments.length > 0 ? '/' + pathSegments.join('/') : '')
+    
+    // Special handling for landing page
+    if (pathSegments.length === 0) {
+      // On landing page
+      newPath = newLang === 'en' ? '/en' : '/'
     } else {
-      // For Thai, use root path (no /th prefix)
-      newPath = pathSegments.length > 0 ? '/' + pathSegments.join('/') : '/'
+      // On other pages - always use language prefix
+      if (newLang === 'en') {
+        newPath = '/en/' + pathSegments.join('/')
+      } else {
+        // For Thai, use /th prefix for all pages except landing
+        newPath = '/th/' + pathSegments.join('/')
+      }
     }
     
     // Keep query parameters if any
