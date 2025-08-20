@@ -38,7 +38,15 @@ security = HTTPBearer()
 STATIC_FILES_PATH = os.environ.get("STATIC_PATH", os.path.join(os.path.dirname(__file__), "..", "frontend", "dist"))
 if not os.path.exists(STATIC_FILES_PATH) and os.path.exists("/app/frontend/dist"):
     STATIC_FILES_PATH = "/app/frontend/dist"
-SERVE_STATIC = os.path.exists(STATIC_FILES_PATH) and settings.is_production
+# Use explicit environment variable or fallback to production check
+SERVE_STATIC = settings.SERVE_FRONTEND or (os.path.exists(STATIC_FILES_PATH) and settings.is_production)
+
+# Debug logging
+print(f"STATIC_FILES_PATH: {STATIC_FILES_PATH}")
+print(f"Path exists: {os.path.exists(STATIC_FILES_PATH)}")
+print(f"SERVE_FRONTEND env: {settings.SERVE_FRONTEND}")
+print(f"is_production: {settings.is_production}")
+print(f"SERVE_STATIC: {SERVE_STATIC}")
 
 def generate_password(length: int = 12) -> str:
     """Generate a random password"""

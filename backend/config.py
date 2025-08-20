@@ -20,6 +20,7 @@ class Settings:
     APP_NAME: str = "IBuyer Thailand"
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = os.getenv("DEBUG", "true").lower() == "true"
+    SERVE_FRONTEND: bool = os.getenv("SERVE_FRONTEND", "false").lower() == "true"
     
     # CORS
     FRONTEND_URL: str = os.getenv(
