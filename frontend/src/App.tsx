@@ -116,12 +116,6 @@ function App() {
                 </main>
               </div>
             } />
-            
-            {/* Redirects for old non-prefixed routes */}
-            <Route path="/property-form" element={<Navigate to="/th/property-form" replace />} />
-            <Route path="/login" element={<Navigate to="/th/login" replace />} />
-            <Route path="/register" element={<Navigate to="/th/register" replace />} />
-            <Route path="/dashboard" element={<Navigate to="/th/dashboard" replace />} />
           </Routes>
         </LanguageWrapper>
       </Router>
