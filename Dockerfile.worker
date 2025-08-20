@@ -9,6 +9,9 @@ RUN apt-get update && apt-get install -y \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
+# Create a non-root user for Celery
+RUN groupadd -r celery && useradd -r -g celery celery
+
 # Copy requirements first for better caching
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
@@ -19,8 +22,14 @@ COPY backend/ ./backend/
 # Set Python path
 ENV PYTHONPATH=/app/backend
 
+# Change ownership of the app directory to celery user
+RUN chown -R celery:celery /app
+
+# Switch to the celery user
+USER celery
+
 # Change to backend directory
 WORKDIR /app/backend
 
-# Run Celery worker
-CMD ["celery", "-A", "celery_app", "worker", "--loglevel=info"]
+# Run Celery worker (can also add --uid=celery flag for extra clarity)
+CMD ["celery", "-A", "celery_app", "worker", "--loglevel=info", "--uid=celery"]
