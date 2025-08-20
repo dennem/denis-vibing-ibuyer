@@ -60,7 +60,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/login`, {
+      const response = await axios.post(API_ENDPOINTS.LOGIN, {
         email,
         password,
       })
@@ -76,7 +76,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const register = async (userData: RegisterData) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/register`, userData)
+      const response = await axios.post(API_ENDPOINTS.REGISTER, userData)
       
       // Auto-login after registration
       await login(userData.email, userData.password)
