@@ -28,9 +28,11 @@ COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
 # Environment variables
 ENV PYTHONUNBUFFERED=1
 ENV PORT=8000
+ENV PYTHONPATH=/app/backend
 
 # Expose port
 EXPOSE 8000
 
-# Start the application
-CMD python -m uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8000}
+# Change to backend directory and start the application
+WORKDIR /app/backend
+CMD ["sh", "-c", "python -m uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]
