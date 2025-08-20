@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import axios from 'axios'
+import { API_ENDPOINTS } from '../config/api'
 
 interface PropertyApplication {
   id: number
@@ -35,7 +36,7 @@ const Dashboard = () => {
 
   const fetchApplications = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/my-applications')
+      const response = await axios.get(API_ENDPOINTS.MY_APPLICATIONS)
       setApplications(response.data)
     } catch (err) {
       setError(t('dashboard.fetchError'))

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import axios from 'axios'
+import { API_BASE_URL, API_ENDPOINTS } from '../config/api'
 
 interface User {
   id: number
@@ -26,7 +27,7 @@ interface RegisterData {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-const API_BASE_URL = 'http://localhost:8000'
+// Use API_BASE_URL from config/api.ts instead
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
@@ -45,7 +46,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const verifyToken = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/me`)
+      const response = await axios.get(API_ENDPOINTS.ME)
       setUser(response.data)
     } catch (error) {
       // Token is invalid, remove it
