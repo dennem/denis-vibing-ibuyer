@@ -1,0 +1,182 @@
+from fastapi import FastAPI, Depends, HTTPException, UploadFile, File
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from sqlalchemy.orm import Session
+from typing import List
+from pydantic import BaseModel
+import uvicorn
+
+from database import get_db, Base, engine
+from models import PropertyApplicationCreate, PropertyApplicationResponse, UserCreate, UserResponse, PropertySubmissionWithRegistration
+from auth import get_current_user, create_access_token, verify_password, get_password_hash
+from crud import create_user, get_user_by_email, create_property_application, get_user_applications
+import secrets
+import string
+
+# Create database tables
+Base.metadata.create_all(bind=engine)
+
+app = FastAPI(title="IBuyer API", version="1.0.0")
+
+# CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # React dev server
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+security = HTTPBearer()
+
+def generate_password(length: int = 12) -> str:
+    """Generate a random password"""
+    characters = string.ascii_letters + string.digits + "!@#$%^&*"
+    password = ''.join(secrets.choice(characters) for i in range(length))
+    return password
+
+def send_welcome_email(email: str, password: str, full_name: str) -> bool:
+    """Send welcome email with login details (placeholder for now)"""
+    # TODO: Implement actual email sending
+    print(f"=== EMAIL TO {email} ===")
+    print(f"Subject: Welcome to IBuyer Thailand!")
+    print(f"Dear {full_name},")
+    print(f"Your account has been created successfully!")
+    print(f"Email: {email}")
+    print(f"Password: {password}")
+    print(f"Login at: http://localhost:5173/login")
+    print(f"========================")
+    return True
+
+@app.get("/")
+def read_root():
+    return {"message": "IBuyer API is running"}
+
+@app.post("/register", response_model=UserResponse)
+def register(user: UserCreate, db: Session = Depends(get_db)):
+    # Check if user already exists
+    db_user = get_user_by_email(db, email=user.email)
+    if db_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    
+    # Create new user
+    hashed_password = get_password_hash(user.password)
+    db_user = create_user(db, user, hashed_password)
+    return db_user
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+@app.post("/login")
+def login(request: LoginRequest, db: Session = Depends(get_db)):
+    user = get_user_by_email(db, email=request.email)
+    if not user or not verify_password(request.password, user.hashed_password):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    access_token = create_access_token(data={"sub": user.email})
+    return {"access_token": access_token, "token_type": "bearer", "user": user}
+
+@app.get("/me", response_model=UserResponse)
+def get_current_user_info(current_user = Depends(get_current_user)):
+    """Get current authenticated user's information"""
+    return current_user
+
+@app.post("/property-application", response_model=PropertyApplicationResponse)
+def submit_property_application(
+    application: PropertyApplicationCreate,
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    db_application = create_property_application(db, application, current_user.id)
+    return db_application
+
+@app.get("/my-applications", response_model=List[PropertyApplicationResponse])
+def get_my_applications(
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    applications = get_user_applications(db, current_user.id)
+    return applications
+
+@app.post("/submit-property-with-registration")
+def submit_property_with_registration(
+    submission: PropertySubmissionWithRegistration,
+    db: Session = Depends(get_db)
+):
+    """
+    Submit a property application and auto-register user if they don't exist
+    """
+    # Check if user already exists
+    existing_user = get_user_by_email(db, email=submission.email)
+    
+    if existing_user:
+        # User exists, just create the property application
+        user = existing_user
+        # Create access token for existing user
+        access_token = create_access_token(data={"sub": user.email})
+    else:
+        # Create new user with generated password
+        generated_password = generate_password()
+        hashed_password = get_password_hash(generated_password)
+        
+        user_data = UserCreate(
+            email=submission.email,
+            password=generated_password,  # We'll hash this in create_user
+            full_name=submission.full_name,
+            phone_number=submission.phone_number
+        )
+        
+        user = create_user(db, user_data, hashed_password)
+        
+        # Send welcome email
+        send_welcome_email(submission.email, generated_password, submission.full_name)
+        
+        # Create access token for new user
+        access_token = create_access_token(data={"sub": user.email})
+    
+    # Create property application
+    property_data = PropertyApplicationCreate(
+        property_type=submission.property_type,
+        property_address=submission.property_address,
+        property_size_sqm=submission.property_size_sqm,
+        bedrooms=submission.bedrooms,
+        bathrooms=submission.bathrooms,
+        asking_price=submission.asking_price,
+        property_condition=submission.property_condition,
+        preferred_timeline=submission.preferred_timeline
+    )
+    
+    application = create_property_application(db, property_data, user.id)
+    
+    return {
+        "message": "Application submitted successfully",
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user": user,
+        "application": application,
+        "new_account_created": existing_user is None
+    }
+
+@app.post("/upload-photos/{application_id}")
+async def upload_photos(
+    application_id: int,
+    files: List[UploadFile] = File(...),
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    # TODO: Implement file upload logic
+    return {"message": f"Uploaded {len(files)} photos for application {application_id}"}
+
+@app.post("/upload-documents/{application_id}")
+async def upload_documents(
+    application_id: int,
+    files: List[UploadFile] = File(...),
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    # TODO: Implement file upload logic
+    return {"message": f"Uploaded {len(files)} documents for application {application_id}"}
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

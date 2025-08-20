@@ -1,0 +1,279 @@
+{
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout"
+  },
+  "hero": {
+    "title": "Sell Your Property in Thailand Fast",
+    "subtitle": "Get cash for your condo or house in just 2 weeks. No waiting, no hassle.",
+    "howItWorks": "How It Works",
+    "step1": "Submit property details",
+    "step2": "Get offer within 2 days", 
+    "step3": "Close in 2 weeks"
+  },
+  "form": {
+    "title": "Submit Your Property Details",
+    "subtitle": "New to IBuyer? No problem! Just fill out the form below and we'll create your account automatically. Login details will be sent to your email.",
+    "personalInfo": "Your Information",
+    "propertyInfo": "Property Information",
+    "fullName": "Full Name",
+    "phoneNumber": "Phone Number",
+    "email": "Email Address",
+    "emailNote": "We'll send your account login details to this email",
+    "propertyType": "Property Type",
+    "propertyAddress": "Property Address",
+    "size": "Size (sqm)",
+    "askingPrice": "Asking Price (THB)",
+    "projectName": "Condo Project Name",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "condition": "Property Condition",
+    "province": "Province",
+    "timeline": "When do you want to sell?",
+    "submit": "Submit Property & Create Account",
+    "submitting": "Creating Account & Submitting Application...",
+    "required": "*",
+    "placeholders": {
+      "fullName": "John Doe",
+      "phoneNumber": "+66 xxx xxx xxx",
+      "email": "your@email.com",
+      "projectName": "e.g., The Lumpini 24, Noble Ploenchit",
+      "address": "Full address including district, province",
+      "price": "e.g., 5000000"
+    },
+    "options": {
+      "propertyType": {
+        "select": "Select property type",
+        "condo": "Condo",
+        "house": "House", 
+        "townhouse": "Townhouse"
+      },
+      "condition": {
+        "select": "Select condition",
+        "excellent": "Excellent",
+        "good": "Good",
+        "fair": "Fair",
+        "needsWork": "Needs Work"
+      },
+      "timeline": {
+        "select": "Select timeline",
+        "asap": "As soon as possible",
+        "oneMonth": "Within 1 month",
+        "threeMonths": "Within 3 months",
+        "sixMonths": "Within 6 months"
+      },
+      "provinces": {
+        "bangkok": "Bangkok",
+        "pattaya": "Pattaya",
+        "phuket": "Phuket",
+        "chiangMai": "Chiang Mai",
+        "samui": "Samui",
+        "amnatCharoen": "Amnat Charoen",
+        "angThong": "Ang Thong",
+        "buengKan": "Bueng Kan",
+        "buriRam": "Buri Ram",
+        "chachoengsao": "Chachoengsao",
+        "chainat": "Chai Nat",
+        "chaiyaphum": "Chaiyaphum",
+        "chanthaburi": "Chanthaburi",
+        "chiangRai": "Chiang Rai",
+        "chonburi": "Chonburi",
+        "chumphon": "Chumphon",
+        "kalasin": "Kalasin",
+        "kamphaengPhet": "Kamphaeng Phet",
+        "kanchanaburi": "Kanchanaburi",
+        "khonKaen": "Khon Kaen",
+        "krabi": "Krabi",
+        "lampang": "Lampang",
+        "lamphun": "Lamphun",
+        "loei": "Loei",
+        "lopburi": "Lopburi",
+        "maeHongSon": "Mae Hong Son",
+        "mahaSarakham": "Maha Sarakham",
+        "mukdahan": "Mukdahan",
+        "nakhonNayok": "Nakhon Nayok",
+        "nakhonPathom": "Nakhon Pathom",
+        "nakhonPhanom": "Nakhon Phanom",
+        "nakhonRatchasima": "Nakhon Ratchasima",
+        "nakhonSawan": "Nakhon Sawan",
+        "nakhonSiThammarat": "Nakhon Si Thammarat",
+        "nan": "Nan",
+        "narathiwat": "Narathiwat",
+        "nongBuaLamphu": "Nong Bua Lamphu",
+        "nongKhai": "Nong Khai",
+        "nonthaburi": "Nonthaburi",
+        "pathumThani": "Pathum Thani",
+        "pattani": "Pattani",
+        "phangNga": "Phang Nga",
+        "phatthalung": "Phatthalung",
+        "phayao": "Phayao",
+        "phetchabun": "Phetchabun",
+        "phetchaburi": "Phetchaburi",
+        "phichit": "Phichit",
+        "phitsanulok": "Phitsanulok",
+        "phrae": "Phrae",
+        "prachinburi": "Prachinburi",
+        "prachuapKhiriKhan": "Prachuap Khiri Khan",
+        "ranong": "Ranong",
+        "ratchaburi": "Ratchaburi",
+        "rayong": "Rayong",
+        "roiEt": "Roi Et",
+        "saKaeo": "Sa Kaeo",
+        "sakonNakhon": "Sakon Nakhon",
+        "samutPrakan": "Samut Prakan",
+        "samutSakhon": "Samut Sakhon",
+        "samutSongkhram": "Samut Songkhram",
+        "saraburi": "Saraburi",
+        "satun": "Satun",
+        "singBuri": "Sing Buri",
+        "sisaket": "Sisaket",
+        "songkhla": "Songkhla",
+        "sukhothai": "Sukhothai",
+        "suphanBuri": "Suphan Buri",
+        "suratThani": "Surat Thani",
+        "surin": "Surin",
+        "tak": "Tak",
+        "trang": "Trang",
+        "trat": "Trat",
+        "ubonRatchathani": "Ubon Ratchathani",
+        "udonThani": "Udon Thani",
+        "uthaiThani": "Uthai Thani",
+        "uttaradit": "Uttaradit",
+        "yala": "Yala",
+        "yasothon": "Yasothon"
+      }
+    }
+  },
+  "success": {
+    "title": "Application Submitted Successfully!",
+    "message": "We've created your account and sent login details to your email. We'll review your property and get back to you within 2 business days.",
+    "redirecting": "Redirecting to your dashboard..."
+  },
+  "dashboard": {
+    "welcome": "Welcome back, {{name}}!",
+    "subtitle": "Track your property applications and offers here.",
+    "noApplications": "No applications yet",
+    "noApplicationsMessage": "Submit your first property to get started with IBuyer.",
+    "submitProperty": "Submit Property",
+    "yourApplications": "Your Applications ({{count}})",
+    "submitNew": "Submit New Property"
+  },
+  "auth": {
+    "loginTitle": "Login to IBuyer",
+    "registerTitle": "Register for IBuyer",
+    "email": "Email Address",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "fullName": "Full Name",
+    "phoneNumber": "Phone Number",
+    "loginButton": "Login",
+    "registerButton": "Create Account",
+    "loggingIn": "Logging in...",
+    "creatingAccount": "Creating Account...",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "registerHere": "Register here",
+    "loginHere": "Login here"
+  },
+  "errors": {
+    "required": "This field is required",
+    "invalidEmail": "Invalid email address",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "passwordsDontMatch": "Passwords do not match",
+    "nameTooShort": "Name must be at least 2 characters",
+    "invalidPhone": "Invalid phone number format",
+    "mustBePositive": "Must be a positive number",
+    "minBathrooms": "Must have at least 1 bathroom",
+    "projectTooShort": "Project name must be at least 2 characters",
+    "submissionFailed": "Submission failed",
+    "loginFailed": "Invalid email or password",
+    "registrationFailed": "Registration failed. Please try again."
+  },
+  "landing": {
+    "hero": {
+      "question": "Need to sell your Bangkok condo fast?",
+      "answer": "We will make you an offer within two weeks",
+      "placeholder": "Enter your condo project name",
+      "cta": "Get My Cash Offer",
+      "processing": "Processing..."
+    },
+    "trust": {
+      "reviews": "247 reviews",
+      "separator": "•",
+      "satisfied": "98% Satisfied Customers"
+    },
+    "process": {
+      "title": "How It Works",
+      "step1": {
+        "title": "Enter Your Project",
+        "description": "Tell us your condo project name and basic details"
+      },
+      "step2": {
+        "title": "Get Instant Estimate", 
+        "description": "Receive a preliminary offer within 24 hours"
+      },
+      "step3": {
+        "title": "Receive Cash in 2 Weeks",
+        "description": "Complete the sale and get your money fast"
+      }
+    },
+    "testimonials": {
+      "title": "What Our Customers Say",
+      "testimonial1": {
+        "text": "Sold my condo in Sukhumvit in just 10 days. No hassle, fair price, quick process!",
+        "name": "Khun Somchai",
+        "location": "Bangkok",
+        "initial": "S"
+      },
+      "testimonial2": {
+        "text": "Amazing service! They handled everything from paperwork to closing. Highly recommend!",
+        "name": "Ms. Sarah",
+        "location": "Sathorn",
+        "initial": "S"
+      },
+      "testimonial3": {
+        "text": "Got cash for my condo when I needed it most. Professional and reliable company.",
+        "name": "Khun Niran",
+        "location": "Phrom Phong", 
+        "initial": "N"
+      }
+    },
+    "benefits": {
+      "title": "Why Choose Us?",
+      "commissions": {
+        "title": "No Commissions",
+        "description": "Save 3-6% in agent fees with our direct purchase model"
+      },
+      "waiting": {
+        "title": "No Waiting",
+        "description": "Get your cash offer fast, close in 2 weeks guaranteed"
+      },
+      "condition": {
+        "title": "Any Condition",
+        "description": "We buy condos as-is, no repairs or cleaning needed"
+      },
+      "obligation": {
+        "title": "No Obligation",
+        "description": "Get your offer first, decide later. No pressure, no commitment"
+      }
+    },
+    "finalCta": {
+      "title": "Ready to Get Your Cash Offer?",
+      "subtitle": "Join hundreds of satisfied condo sellers who chose the fast, easy way"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "close": "Close",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "yes": "Yes",
+    "no": "No"
+  }
+}
