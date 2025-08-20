@@ -20,15 +20,11 @@ import string
 # Import Celery app and task
 from celery_app import celery_app  # Import the configured Celery instance
 from tasks.email import send_property_submission_email
-from flower_app import start_flower_in_background
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title=settings.APP_NAME, version=settings.APP_VERSION)
-
-# Start Flower monitoring if enabled
-start_flower_in_background()
 
 # CORS middleware
 # In production with monolithic deployment, CORS isn't needed for same-origin requests
@@ -230,26 +226,14 @@ async def upload_documents(
     # TODO: Implement file upload logic
     return {"message": f"Uploaded {len(files)} documents for application {application_id}"}
 
-@app.get("/admin/flower")
-def flower_redirect():
-    """Redirect to Flower UI - open access"""
-    from fastapi.responses import RedirectResponse
-    
-    # In production, Flower runs on same host
-    if settings.is_production:
-        return RedirectResponse(url="/admin/flower/")
-    else:
-        # Local development - Flower runs on different port
-        return RedirectResponse(url="http://localhost:5555")
-
 @app.get("/admin/flower-info")
 def flower_info():
-    """Get Flower access information - open access"""
+    """Get Flower access information"""
     return {
-        "message": "Flower monitoring is running",
-        "local_url": "http://localhost:5555",
-        "production_url": "/admin/flower/",
-        "note": "Flower runs automatically - no configuration needed"
+        "message": "Flower should run as a separate Railway service",
+        "local_url": "http://localhost:5555 (run locally with: celery -A celery_app flower)",
+        "production": "Create new Railway service with start command: celery -A celery_app flower --port=$PORT",
+        "note": "Flower needs its own service to be accessible in production"
     }
 
 # Serve static files in production
