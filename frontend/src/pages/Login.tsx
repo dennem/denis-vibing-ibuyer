@@ -13,7 +13,7 @@ const Login = () => {
   const { login } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -34,7 +34,7 @@ const Login = () => {
       const dashboardPath = isEnglishPath ? '/en/dashboard' : '/th/dashboard'
       navigate(dashboardPath)
     } catch (err) {
-      setError('Invalid email or password')
+      setError(t('errors.loginFailed'))
     } finally {
       setIsLoading(false)
     }
@@ -44,7 +44,7 @@ const Login = () => {
     <div className="max-w-md mx-auto mt-8">
       <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-8">
         <h1 className="text-2xl font-bold text-center text-gray-900 mb-8">
-          Login to IBuyer
+          {t('auth.loginTitle')}
         </h1>
 
         {error && (
@@ -56,20 +56,20 @@ const Login = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-              Email Address
+              {t('auth.email')}
             </label>
             <input
               id="email"
               type="email"
               {...register('email', {
-                required: 'Email is required',
+                required: t('errors.required'),
                 pattern: {
                   value: /^\S+@\S+$/i,
-                  message: 'Invalid email address',
+                  message: t('errors.invalidEmail'),
                 },
               })}
               className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="your@email.com"
+              placeholder={t('form.placeholders.email')}
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
@@ -78,20 +78,20 @@ const Login = () => {
 
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-              Password
+              {t('auth.password')}
             </label>
             <input
               id="password"
               type="password"
               {...register('password', {
-                required: 'Password is required',
+                required: t('errors.required'),
                 minLength: {
                   value: 6,
-                  message: 'Password must be at least 6 characters',
+                  message: t('errors.passwordTooShort'),
                 },
               })}
               className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Your password"
+              placeholder={t('auth.password')}
             />
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
@@ -107,15 +107,15 @@ const Login = () => {
                 : 'bg-blue-600 hover:bg-blue-700'
             } text-white`}
           >
-            {isLoading ? 'Logging in...' : 'Login'}
+            {isLoading ? t('auth.loggingIn') : t('auth.loginButton')}
           </button>
         </form>
 
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
-            Don't have an account?{' '}
-            <Link to="/register" className="text-blue-600 hover:text-blue-500 font-medium">
-              Register here
+            {t('auth.noAccount')}{' '}
+            <Link to={location.pathname.startsWith('/en') ? '/en/register' : '/th/register'} className="text-blue-600 hover:text-blue-500 font-medium">
+              {t('auth.registerHere')}
             </Link>
           </p>
         </div>

@@ -4,7 +4,8 @@
     "dashboard": "Dashboard",
     "login": "Login",
     "register": "Register",
-    "logout": "Logout"
+    "logout": "Logout",
+    "welcomeBack": "Welcome back, {{name}}!"
   },
   "hero": {
     "title": "Sell Your Property in Thailand Fast",

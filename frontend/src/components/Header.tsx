@@ -38,7 +38,7 @@ const Header = () => {
               <Link to={getLocalizedPath('/dashboard')} className="hover:text-blue-200">
                 {t('navigation.dashboard')}
               </Link>
-              <span className="text-sm">Welcome back, {user.full_name?.split(' ')[0]}!</span>
+              <span className="text-sm">{t('navigation.welcomeBack', { name: user.full_name?.split(' ')[0] })}</span>
               <button
                 onClick={handleLogout}
                 className="bg-blue-500 hover:bg-blue-400 px-4 py-2 rounded transition duration-200"
