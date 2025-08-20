@@ -23,9 +23,16 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(title=settings.APP_NAME, version=settings.APP_VERSION)
 
 # CORS middleware
+# In production with monolithic deployment, CORS isn't needed for same-origin requests
+# But we'll keep it configured for any external access
+allowed_origins = [settings.FRONTEND_URL, "http://localhost:5173", "http://localhost:3000"]
+if settings.is_production:
+    # Add production URL
+    allowed_origins.append("https://denis-vibing-ibuyer-production.up.railway.app")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.FRONTEND_URL],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
