@@ -28,7 +28,7 @@ const PropertyForm = () => {
   const { user, setAuthData } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [projectName, setProjectName] = useState('')
@@ -79,7 +79,10 @@ const PropertyForm = () => {
       setSubmitSuccess(true)
       reset()
       setTimeout(() => {
-        navigate('/dashboard')
+        // Navigate to language-prefixed dashboard
+        const isEnglishPath = location.pathname.startsWith('/en')
+        const dashboardPath = isEnglishPath ? '/en/dashboard' : '/th/dashboard'
+        navigate(dashboardPath)
       }, 2000)
     } catch (error: any) {
       console.error('Failed to submit application:', error)

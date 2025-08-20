@@ -44,32 +44,19 @@ function App() {
       <Router>
         <LanguageWrapper>
           <Routes>
-            {/* Thai routes (default) */}
+            {/* Landing page - special case without language prefix for Thai */}
             <Route path="/" element={<Landing />} />
             <Route path="/th" element={<Navigate to="/" replace />} />
-            
-            {/* English routes */}
             <Route path="/en" element={<Landing />} />
             
-            {/* Thai pages with header */}
-            <Route path="/property-form" element={
+            {/* Thai routes with /th prefix */}
+            <Route path="/th/property-form" element={
               <div className="min-h-screen">
                 <Header />
                 <PropertyForm />
               </div>
             } />
-            <Route path="/th/property-form" element={<Navigate to="/property-form" replace />} />
-            
-            {/* English pages with header */}
-            <Route path="/en/property-form" element={
-              <div className="min-h-screen">
-                <Header />
-                <PropertyForm />
-              </div>
-            } />
-            
-            {/* Login routes */}
-            <Route path="/login" element={
+            <Route path="/th/login" element={
               <div className="bg-gray-50 min-h-screen">
                 <Header />
                 <main className="container mx-auto px-4 py-8">
@@ -77,18 +64,7 @@ function App() {
                 </main>
               </div>
             } />
-            <Route path="/th/login" element={<Navigate to="/login" replace />} />
-            <Route path="/en/login" element={
-              <div className="bg-gray-50 min-h-screen">
-                <Header />
-                <main className="container mx-auto px-4 py-8">
-                  <Login />
-                </main>
-              </div>
-            } />
-            
-            {/* Register routes */}
-            <Route path="/register" element={
+            <Route path="/th/register" element={
               <div className="bg-gray-50 min-h-screen">
                 <Header />
                 <main className="container mx-auto px-4 py-8">
@@ -96,18 +72,7 @@ function App() {
                 </main>
               </div>
             } />
-            <Route path="/th/register" element={<Navigate to="/register" replace />} />
-            <Route path="/en/register" element={
-              <div className="bg-gray-50 min-h-screen">
-                <Header />
-                <main className="container mx-auto px-4 py-8">
-                  <Register />
-                </main>
-              </div>
-            } />
-            
-            {/* Dashboard routes */}
-            <Route path="/dashboard" element={
+            <Route path="/th/dashboard" element={
               <div className="bg-gray-50 min-h-screen">
                 <Header />
                 <main className="container mx-auto px-4 py-8">
@@ -117,7 +82,30 @@ function App() {
                 </main>
               </div>
             } />
-            <Route path="/th/dashboard" element={<Navigate to="/dashboard" replace />} />
+            
+            {/* English routes with /en prefix */}
+            <Route path="/en/property-form" element={
+              <div className="min-h-screen">
+                <Header />
+                <PropertyForm />
+              </div>
+            } />
+            <Route path="/en/login" element={
+              <div className="bg-gray-50 min-h-screen">
+                <Header />
+                <main className="container mx-auto px-4 py-8">
+                  <Login />
+                </main>
+              </div>
+            } />
+            <Route path="/en/register" element={
+              <div className="bg-gray-50 min-h-screen">
+                <Header />
+                <main className="container mx-auto px-4 py-8">
+                  <Register />
+                </main>
+              </div>
+            } />
             <Route path="/en/dashboard" element={
               <div className="bg-gray-50 min-h-screen">
                 <Header />
@@ -128,6 +116,12 @@ function App() {
                 </main>
               </div>
             } />
+            
+            {/* Redirects for old non-prefixed routes */}
+            <Route path="/property-form" element={<Navigate to="/th/property-form" replace />} />
+            <Route path="/login" element={<Navigate to="/th/login" replace />} />
+            <Route path="/register" element={<Navigate to="/th/register" replace />} />
+            <Route path="/dashboard" element={<Navigate to="/th/dashboard" replace />} />
           </Routes>
         </LanguageWrapper>
       </Router>

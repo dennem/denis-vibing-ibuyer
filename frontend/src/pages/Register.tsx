@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useTranslation } from 'react-i18next'
 
 interface RegisterFormData {
   email: string
@@ -14,6 +15,8 @@ interface RegisterFormData {
 const Register = () => {
   const { register: registerUser } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const { i18n } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -37,7 +40,10 @@ const Register = () => {
         full_name: data.full_name,
         phone_number: data.phone_number,
       })
-      navigate('/dashboard')
+      // Navigate to language-prefixed dashboard
+      const isEnglishPath = location.pathname.startsWith('/en')
+      const dashboardPath = isEnglishPath ? '/en/dashboard' : '/th/dashboard'
+      navigate(dashboardPath)
     } catch (err) {
       setError('Registration failed. Please try again.')
     } finally {

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useTranslation } from 'react-i18next'
 
 interface LoginFormData {
   email: string
@@ -11,6 +12,8 @@ interface LoginFormData {
 const Login = () => {
   const { login } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const { i18n } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -26,7 +29,10 @@ const Login = () => {
     
     try {
       await login(data.email, data.password)
-      navigate('/dashboard')
+      // Navigate to language-prefixed dashboard
+      const isEnglishPath = location.pathname.startsWith('/en')
+      const dashboardPath = isEnglishPath ? '/en/dashboard' : '/th/dashboard'
+      navigate(dashboardPath)
     } catch (err) {
       setError('Invalid email or password')
     } finally {

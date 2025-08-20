@@ -43,7 +43,7 @@ const Landing = () => {
     }
     
     setIsSubmitting(true)
-    const langPrefix = i18n.language === 'en' ? '/en' : ''
+    const langPrefix = i18n.language === 'en' ? '/en' : '/th'
     navigate(`${langPrefix}/property-form`, { state: { projectName: heroProjectName } })
   }
 
@@ -62,7 +62,7 @@ const Landing = () => {
     }
     
     setIsSubmitting(true)
-    const langPrefix = i18n.language === 'en' ? '/en' : ''
+    const langPrefix = i18n.language === 'en' ? '/en' : '/th'
     navigate(`${langPrefix}/property-form`, { state: { projectName: finalProjectName } })
   }
 

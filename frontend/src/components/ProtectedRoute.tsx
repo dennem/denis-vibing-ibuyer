@@ -1,5 +1,6 @@
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useTranslation } from 'react-i18next'
 import { ReactNode } from 'react'
 
 interface ProtectedRouteProps {
@@ -8,6 +9,8 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { user, loading } = useAuth()
+  const { i18n } = useTranslation()
+  const location = useLocation()
 
   if (loading) {
     return (
@@ -20,7 +23,11 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     )
   }
 
-  return user ? <>{children}</> : <Navigate to="/login" />
+  // Determine language from current URL
+  const isEnglishPath = location.pathname.startsWith('/en')
+  const loginPath = isEnglishPath ? '/en/login' : '/th/login'
+
+  return user ? <>{children}</> : <Navigate to={loginPath} />
 }
 
 export default ProtectedRoute
