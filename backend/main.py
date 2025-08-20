@@ -17,6 +17,9 @@ from config import settings
 import secrets
 import string
 
+# Import Celery task
+from tasks.email import send_property_submission_email
+
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
@@ -155,8 +158,7 @@ def submit_property_with_registration(
         
         user = create_user(db, user_data, hashed_password)
         
-        # Send welcome email
-        send_welcome_email(submission.email, generated_password, submission.full_name)
+        # Email will be sent asynchronously via Celery task
         
         # Create access token for new user
         access_token = create_access_token(data={"sub": user.email})
@@ -176,6 +178,23 @@ def submit_property_with_registration(
     )
     
     application = create_property_application(db, property_data, user.id)
+    
+    # Queue email task (fire and forget, like Sidekiq's perform_async)
+    email_data = {
+        'email': submission.email,
+        'full_name': submission.full_name,
+        'property_type': submission.property_type,
+        'property_address': submission.property_address,
+        'asking_price': submission.asking_price,
+        'new_user': existing_user is None,
+    }
+    
+    # Add password only for new users
+    if existing_user is None:
+        email_data['password'] = generated_password
+    
+    # Queue the task (won't wait for it to complete)
+    send_property_submission_email.delay(email_data)
     
     return {
         "message": "Application submitted successfully",
