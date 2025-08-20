@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import AutocompleteInput from '../components/AutocompleteInput'
+import { API_ENDPOINTS } from '../config/api'
 
 interface PropertyFormData {
   // User info (for auto-registration)
@@ -65,9 +66,9 @@ const PropertyForm = () => {
     console.log('Form submitted with data:', submissionData)
     setIsSubmitting(true)
     try {
-      console.log('Sending request to:', 'http://localhost:8000/submit-property-with-registration')
+      console.log('Sending request to:', API_ENDPOINTS.SUBMIT_PROPERTY)
       // Submit to new endpoint that handles auto-registration
-      const response = await axios.post('http://localhost:8000/submit-property-with-registration', submissionData)
+      const response = await axios.post(API_ENDPOINTS.SUBMIT_PROPERTY, submissionData)
       console.log('Response received:', response.data)
       const { access_token, user: newUser } = response.data
       

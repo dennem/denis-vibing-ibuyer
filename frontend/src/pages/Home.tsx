@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { API_ENDPOINTS } from '../config/api'
 
 interface PropertyFormData {
   // User info (for auto-registration)
@@ -40,9 +41,9 @@ const Home = () => {
     console.log('Form submitted with data:', data)
     setIsSubmitting(true)
     try {
-      console.log('Sending request to:', 'http://localhost:8000/submit-property-with-registration')
+      console.log('Sending request to:', API_ENDPOINTS.SUBMIT_PROPERTY)
       // Submit to new endpoint that handles auto-registration
-      const response = await axios.post('http://localhost:8000/submit-property-with-registration', data)
+      const response = await axios.post(API_ENDPOINTS.SUBMIT_PROPERTY, data)
       console.log('Response received:', response.data)
       const { access_token, user: newUser } = response.data
       
