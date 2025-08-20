@@ -207,14 +207,26 @@ async def upload_documents(
     return {"message": f"Uploaded {len(files)} documents for application {application_id}"}
 
 # Serve static files in production
+# IMPORTANT: This must be at the END of the file, after all API routes are defined
 if SERVE_STATIC:
-    app.mount("/assets", StaticFiles(directory=os.path.join(STATIC_FILES_PATH, "assets")), name="assets")
+    # Mount static assets directory
+    if os.path.exists(os.path.join(STATIC_FILES_PATH, "assets")):
+        app.mount("/assets", StaticFiles(directory=os.path.join(STATIC_FILES_PATH, "assets")), name="assets")
     
+    # Catch-all route MUST be last - it serves the React app for all unmatched routes
     @app.get("/{full_path:path}")
     async def serve_spa(full_path: str):
         """Serve the React SPA for all non-API routes"""
-        # Serve index.html for all routes (React will handle routing)
-        return FileResponse(os.path.join(STATIC_FILES_PATH, "index.html"))
+        # Check if it's an API route that should 404
+        if full_path.startswith("api/"):
+            raise HTTPException(status_code=404, detail="API endpoint not found")
+        
+        # Serve index.html for all other routes (React will handle routing)
+        index_path = os.path.join(STATIC_FILES_PATH, "index.html")
+        if os.path.exists(index_path):
+            return FileResponse(index_path)
+        else:
+            raise HTTPException(status_code=404, detail="Frontend not found")
 
 if __name__ == "__main__":
     uvicorn.run(app, host=settings.HOST, port=settings.PORT)
