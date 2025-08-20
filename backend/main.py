@@ -59,8 +59,8 @@ def send_welcome_email(email: str, password: str, full_name: str) -> bool:
     print(f"========================")
     return True
 
-@app.get("/")
-def read_root():
+@app.get("/api/health")
+def health_check():
     return {"message": "IBuyer API is running"}
 
 @app.post("/register", response_model=UserResponse)
