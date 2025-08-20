@@ -16,7 +16,7 @@ const Register = () => {
   const { register: registerUser } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -45,7 +45,7 @@ const Register = () => {
       const dashboardPath = isEnglishPath ? '/en/dashboard' : '/th/dashboard'
       navigate(dashboardPath)
     } catch (err) {
-      setError('Registration failed. Please try again.')
+      setError(t('errors.registrationFailed'))
     } finally {
       setIsLoading(false)
     }
@@ -55,7 +55,7 @@ const Register = () => {
     <div className="max-w-md mx-auto mt-8">
       <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-8">
         <h1 className="text-2xl font-bold text-center text-gray-900 mb-8">
-          Register for IBuyer
+          {t('auth.registerTitle')}
         </h1>
 
         {error && (
@@ -67,20 +67,20 @@ const Register = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
             <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-2">
-              Full Name
+              {t('auth.fullName')}
             </label>
             <input
               id="full_name"
               type="text"
               {...register('full_name', {
-                required: 'Full name is required',
+                required: t('errors.required'),
                 minLength: {
                   value: 2,
-                  message: 'Name must be at least 2 characters',
+                  message: t('errors.nameTooShort'),
                 },
               })}
               className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="John Doe"
+              placeholder={t('form.placeholders.fullName')}
             />
             {errors.full_name && (
               <p className="text-red-500 text-sm mt-1">{errors.full_name.message}</p>
@@ -89,20 +89,20 @@ const Register = () => {
 
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-              Email Address
+              {t('auth.email')}
             </label>
             <input
               id="email"
               type="email"
               {...register('email', {
-                required: 'Email is required',
+                required: t('errors.required'),
                 pattern: {
                   value: /^\S+@\S+$/i,
-                  message: 'Invalid email address',
+                  message: t('errors.invalidEmail'),
                 },
               })}
               className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="your@email.com"
+              placeholder={t('form.placeholders.email')}
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
@@ -111,20 +111,20 @@ const Register = () => {
 
           <div>
             <label htmlFor="phone_number" className="block text-sm font-medium text-gray-700 mb-2">
-              Phone Number
+              {t('auth.phoneNumber')}
             </label>
             <input
               id="phone_number"
               type="tel"
               {...register('phone_number', {
-                required: 'Phone number is required',
+                required: t('errors.required'),
                 pattern: {
                   value: /^[0-9+\-\s()]+$/,
-                  message: 'Invalid phone number',
+                  message: t('errors.invalidPhone'),
                 },
               })}
               className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="+66 xxx xxx xxx"
+              placeholder={t('form.placeholders.phoneNumber')}
             />
             {errors.phone_number && (
               <p className="text-red-500 text-sm mt-1">{errors.phone_number.message}</p>
@@ -133,20 +133,20 @@ const Register = () => {
 
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-              Password
+              {t('auth.password')}
             </label>
             <input
               id="password"
               type="password"
               {...register('password', {
-                required: 'Password is required',
+                required: t('errors.required'),
                 minLength: {
                   value: 6,
-                  message: 'Password must be at least 6 characters',
+                  message: t('errors.passwordTooShort'),
                 },
               })}
               className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Choose a secure password"
+              placeholder={t('auth.password')}
             />
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
@@ -155,18 +155,18 @@ const Register = () => {
 
           <div>
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
-              Confirm Password
+              {t('auth.confirmPassword')}
             </label>
             <input
               id="confirmPassword"
               type="password"
               {...register('confirmPassword', {
-                required: 'Please confirm your password',
+                required: t('errors.required'),
                 validate: (value) =>
-                  value === password || 'Passwords do not match',
+                  value === password || t('errors.passwordsDontMatch'),
               })}
               className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Confirm your password"
+              placeholder={t('auth.confirmPassword')}
             />
             {errors.confirmPassword && (
               <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>
@@ -182,15 +182,15 @@ const Register = () => {
                 : 'bg-blue-600 hover:bg-blue-700'
             } text-white`}
           >
-            {isLoading ? 'Creating Account...' : 'Create Account'}
+            {isLoading ? t('auth.creatingAccount') : t('auth.registerButton')}
           </button>
         </form>
 
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
-            Already have an account?{' '}
-            <Link to="/login" className="text-blue-600 hover:text-blue-500 font-medium">
-              Login here
+            {t('auth.haveAccount')}{' '}
+            <Link to={location.pathname.startsWith('/en') ? '/en/login' : '/th/login'} className="text-blue-600 hover:text-blue-500 font-medium">
+              {t('auth.loginHere')}
             </Link>
           </p>
         </div>
