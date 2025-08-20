@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
+import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
 import axios from 'axios'
 
 interface PropertyApplication {
@@ -21,6 +23,8 @@ interface PropertyApplication {
 
 const Dashboard = () => {
   const { user } = useAuth()
+  const { t, i18n } = useTranslation()
+  const location = useLocation()
   const [applications, setApplications] = useState<PropertyApplication[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -34,7 +38,7 @@ const Dashboard = () => {
       const response = await axios.get('http://localhost:8000/my-applications')
       setApplications(response.data)
     } catch (err) {
-      setError('Failed to fetch applications')
+      setError(t('dashboard.fetchError'))
     } finally {
       setLoading(false)
     }
@@ -53,15 +57,7 @@ const Dashboard = () => {
   }
 
   const getStatusText = (status: string) => {
-    const texts = {
-      submitted: 'Submitted',
-      under_review: 'Under Review',
-      offer_made: 'Offer Made',
-      offer_accepted: 'Offer Accepted',
-      offer_declined: 'Offer Declined',
-      completed: 'Completed',
-    }
-    return texts[status as keyof typeof texts] || status
+    return t(`dashboard.status.${status}`, status)
   }
 
   const formatPrice = (price: number) => {
@@ -73,7 +69,8 @@ const Dashboard = () => {
   }
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    const locale = i18n.language === 'th' ? 'th-TH' : 'en-US'
+    return new Date(dateString).toLocaleDateString(locale, {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
@@ -85,7 +82,7 @@ const Dashboard = () => {
       <div className="flex justify-center items-center min-h-64">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading your applications...</p>
+          <p className="mt-4 text-gray-600">{t('dashboard.loading')}</p>
         </div>
       </div>
     )
@@ -95,10 +92,10 @@ const Dashboard = () => {
     <div className="max-w-6xl mx-auto">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Welcome back, {user?.full_name?.split(' ')[0]}!
+          {t('dashboard.welcome', { name: user?.full_name?.split(' ')[0] })}
         </h1>
         <p className="text-gray-600">
-          Track your property applications and offers here.
+          {t('dashboard.subtitle')}
         </p>
       </div>
 
@@ -112,29 +109,29 @@ const Dashboard = () => {
         <div className="text-center py-12">
           <div className="text-gray-400 text-6xl mb-4">🏠</div>
           <h2 className="text-xl font-semibold text-gray-600 mb-2">
-            No applications yet
+            {t('dashboard.noApplications')}
           </h2>
           <p className="text-gray-500 mb-6">
-            Submit your first property to get started with IBuyer.
+            {t('dashboard.noApplicationsMessage')}
           </p>
           <a
-            href="/"
+            href={location.pathname.startsWith('/en') ? '/en' : '/'}
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium transition duration-200"
           >
-            Submit Property
+            {t('dashboard.submitProperty')}
           </a>
         </div>
       ) : (
         <div className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold text-gray-900">
-              Your Applications ({applications.length})
+              {t('dashboard.yourApplications', { count: applications.length })}
             </h2>
             <a
-              href="/"
+              href={location.pathname.startsWith('/en') ? '/en' : '/'}
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium transition duration-200"
             >
-              Submit New Property
+              {t('dashboard.submitNew')}
             </a>
           </div>
 
@@ -155,7 +152,7 @@ const Dashboard = () => {
                         {app.property_address}
                       </p>
                       <p className="text-xs text-gray-500">
-                        Submitted on {formatDate(app.created_at)}
+                        {t('dashboard.submittedOn', { date: formatDate(app.created_at) })}
                       </p>
                     </div>
                     <span
@@ -169,19 +166,19 @@ const Dashboard = () => {
 
                   <div className="grid md:grid-cols-4 gap-4 text-sm">
                     <div>
-                      <p className="text-gray-500">Bedrooms</p>
+                      <p className="text-gray-500">{t('form.bedrooms')}</p>
                       <p className="font-medium">{app.bedrooms}</p>
                     </div>
                     <div>
-                      <p className="text-gray-500">Bathrooms</p>
+                      <p className="text-gray-500">{t('form.bathrooms')}</p>
                       <p className="font-medium">{app.bathrooms}</p>
                     </div>
                     <div>
-                      <p className="text-gray-500">Condition</p>
+                      <p className="text-gray-500">{t('form.condition')}</p>
                       <p className="font-medium capitalize">{app.property_condition.replace('_', ' ')}</p>
                     </div>
                     <div>
-                      <p className="text-gray-500">Asking Price</p>
+                      <p className="text-gray-500">{t('form.askingPrice')}</p>
                       <p className="font-medium">{formatPrice(app.asking_price)}</p>
                     </div>
                   </div>
@@ -191,21 +188,21 @@ const Dashboard = () => {
                       <div className="flex justify-between items-center">
                         <div>
                           <p className="text-green-800 font-medium">
-                            Our Offer: {formatPrice(app.offer_amount)}
+                            {t('dashboard.ourOffer')}: {formatPrice(app.offer_amount)}
                           </p>
                           {app.offer_made_at && (
                             <p className="text-green-600 text-sm">
-                              Offered on {formatDate(app.offer_made_at)}
+                              {t('dashboard.offeredOn', { date: formatDate(app.offer_made_at) })}
                             </p>
                           )}
                         </div>
                         {app.status === 'offer_made' && (
                           <div className="space-x-2">
                             <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded text-sm font-medium transition duration-200">
-                              Accept Offer
+                              {t('dashboard.acceptOffer')}
                             </button>
                             <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded text-sm font-medium transition duration-200">
-                              Decline
+                              {t('dashboard.declineOffer')}
                             </button>
                           </div>
                         )}
@@ -216,10 +213,10 @@ const Dashboard = () => {
                   {app.status === 'under_review' && (
                     <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
                       <p className="text-yellow-800 font-medium">
-                        🔍 Our team is reviewing your property
+                        🔍 {t('dashboard.reviewingTitle')}
                       </p>
                       <p className="text-yellow-700 text-sm">
-                        We'll get back to you within 2 business days with our offer.
+                        {t('dashboard.reviewingMessage')}
                       </p>
                     </div>
                   )}
@@ -227,10 +224,10 @@ const Dashboard = () => {
                   {app.status === 'submitted' && (
                     <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl">
                       <p className="text-blue-800 font-medium">
-                        📝 Application received
+                        📝 {t('dashboard.receivedTitle')}
                       </p>
                       <p className="text-blue-700 text-sm">
-                        Your application is in queue. We'll start reviewing it shortly.
+                        {t('dashboard.receivedMessage')}
                       </p>
                     </div>
                   )}

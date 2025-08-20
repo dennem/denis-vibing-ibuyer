@@ -155,11 +155,30 @@
   "dashboard": {
     "welcome": "ยินดีต้อนรับกลับ, {{name}}!",
     "subtitle": "ติดตามใบสมัครและข้อเสนออสังหาริมทรัพย์ของคุณที่นี่",
+    "loading": "กำลังโหลดใบสมัครของคุณ...",
+    "fetchError": "ไม่สามารถดึงข้อมูลใบสมัครได้",
     "noApplications": "ยังไม่มีใบสมัคร",
     "noApplicationsMessage": "ส่งอสังหาริมทรัพย์แรกของคุณเพื่อเริ่มต้นกับ IBuyer",
     "submitProperty": "ส่งอสังหาริมทรัพย์",
     "yourApplications": "ใบสมัครของคุณ ({{count}})",
-    "submitNew": "ส่งอสังหาริมทรัพย์ใหม่"
+    "submitNew": "ส่งอสังหาริมทรัพย์ใหม่",
+    "submittedOn": "ส่งเมื่อ {{date}}",
+    "offeredOn": "เสนอราคาเมื่อ {{date}}",
+    "ourOffer": "ข้อเสนอของเรา",
+    "acceptOffer": "ยอมรับข้อเสนอ",
+    "declineOffer": "ปฏิเสธ",
+    "reviewingTitle": "ทีมของเรากำลังตรวจสอบอสังหาริมทรัพย์ของคุณ",
+    "reviewingMessage": "เราจะติดต่อกลับภายใน 2 วันทำการพร้อมข้อเสนอของเรา",
+    "receivedTitle": "ได้รับใบสมัครแล้ว",
+    "receivedMessage": "ใบสมัครของคุณอยู่ในคิว เราจะเริ่มตรวจสอบในเร็วๆ นี้",
+    "status": {
+      "submitted": "ส่งแล้ว",
+      "under_review": "กำลังตรวจสอบ",
+      "offer_made": "เสนอราคาแล้ว",
+      "offer_accepted": "ยอมรับข้อเสนอ",
+      "offer_declined": "ปฏิเสธข้อเสนอ",
+      "completed": "เสร็จสิ้น"
+    }
   },
   "auth": {
     "loginTitle": "เข้าสู่ระบบ IBuyer",

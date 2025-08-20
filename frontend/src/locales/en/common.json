@@ -155,11 +155,30 @@
   "dashboard": {
     "welcome": "Welcome back, {{name}}!",
     "subtitle": "Track your property applications and offers here.",
+    "loading": "Loading your applications...",
+    "fetchError": "Failed to fetch applications",
     "noApplications": "No applications yet",
     "noApplicationsMessage": "Submit your first property to get started with IBuyer.",
     "submitProperty": "Submit Property",
     "yourApplications": "Your Applications ({{count}})",
-    "submitNew": "Submit New Property"
+    "submitNew": "Submit New Property",
+    "submittedOn": "Submitted on {{date}}",
+    "offeredOn": "Offered on {{date}}",
+    "ourOffer": "Our Offer",
+    "acceptOffer": "Accept Offer",
+    "declineOffer": "Decline",
+    "reviewingTitle": "Our team is reviewing your property",
+    "reviewingMessage": "We'll get back to you within 2 business days with our offer.",
+    "receivedTitle": "Application received",
+    "receivedMessage": "Your application is in queue. We'll start reviewing it shortly.",
+    "status": {
+      "submitted": "Submitted",
+      "under_review": "Under Review",
+      "offer_made": "Offer Made",
+      "offer_accepted": "Offer Accepted",
+      "offer_declined": "Offer Declined",
+      "completed": "Completed"
+    }
   },
   "auth": {
     "loginTitle": "Login to IBuyer",
