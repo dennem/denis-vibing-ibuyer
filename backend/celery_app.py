@@ -12,7 +12,7 @@ celery_app = Celery(
     include=['tasks.email']  # Just one task module for now
 )
 
-# Basic configuration
+# Basic configuration with memory optimization
 celery_app.conf.update(
     task_serializer='json',
     accept_content=['json'],
@@ -24,4 +24,19 @@ celery_app.conf.update(
     task_acks_late=True,
     task_default_retry_delay=60,  # 60 seconds
     task_max_retries=3,
+    
+    # Memory optimization settings
+    worker_max_tasks_per_child=100,  # Restart worker after 100 tasks to prevent memory leaks
+    worker_prefetch_multiplier=1,    # Only fetch one task at a time
+    worker_concurrency=1,             # Use only 1 worker process (lowest memory usage)
+    worker_disable_rate_limits=True,  # Disable rate limiting to save memory
+    
+    # Redis connection pooling
+    broker_connection_retry_on_startup=True,
+    broker_pool_limit=1,              # Minimal connection pool
+    redis_max_connections=2,          # Limit Redis connections
+    
+    # Result backend optimization (we don't really need results stored)
+    result_expires=300,               # Results expire after 5 minutes
+    result_backend=None,              # Don't store results at all to save memory
 )
