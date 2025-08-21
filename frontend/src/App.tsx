@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -38,6 +38,11 @@ function LanguageWrapper({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }
 
+// Layout component that wraps language-specific routes
+function LanguageLayout() {
+  return <Outlet />
+}
+
 function App() {
   return (
     <AuthProvider>
@@ -49,73 +54,43 @@ function App() {
             <Route path="/th" element={<Navigate to="/" replace />} />
             <Route path="/en" element={<Landing />} />
             
-            {/* Thai routes with /th prefix */}
-            <Route path="/th/property-form" element={
-              <div className="min-h-screen">
-                <Header />
-                <PropertyForm />
-              </div>
-            } />
-            <Route path="/th/login" element={
-              <div className="bg-gray-50 min-h-screen">
-                <Header />
-                <main className="container mx-auto px-4 py-8">
-                  <Login />
-                </main>
-              </div>
-            } />
-            <Route path="/th/register" element={
-              <div className="bg-gray-50 min-h-screen">
-                <Header />
-                <main className="container mx-auto px-4 py-8">
-                  <Register />
-                </main>
-              </div>
-            } />
-            <Route path="/th/dashboard" element={
-              <div className="bg-gray-50 min-h-screen">
-                <Header />
-                <main className="container mx-auto px-4 py-8">
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                </main>
-              </div>
-            } />
-            
-            {/* English routes with /en prefix */}
-            <Route path="/en/property-form" element={
-              <div className="min-h-screen">
-                <Header />
-                <PropertyForm />
-              </div>
-            } />
-            <Route path="/en/login" element={
-              <div className="bg-gray-50 min-h-screen">
-                <Header />
-                <main className="container mx-auto px-4 py-8">
-                  <Login />
-                </main>
-              </div>
-            } />
-            <Route path="/en/register" element={
-              <div className="bg-gray-50 min-h-screen">
-                <Header />
-                <main className="container mx-auto px-4 py-8">
-                  <Register />
-                </main>
-              </div>
-            } />
-            <Route path="/en/dashboard" element={
-              <div className="bg-gray-50 min-h-screen">
-                <Header />
-                <main className="container mx-auto px-4 py-8">
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                </main>
-              </div>
-            } />
+            {/* Nested routes for both Thai and English using a language layout */}
+            {['th', 'en'].map(lang => (
+              <Route key={lang} path={`/${lang}`} element={<LanguageLayout />}>
+                <Route path="property-form" element={
+                  <div className="min-h-screen">
+                    <Header />
+                    <PropertyForm />
+                  </div>
+                } />
+                <Route path="login" element={
+                  <div className="bg-gray-50 min-h-screen">
+                    <Header />
+                    <main className="container mx-auto px-4 py-8">
+                      <Login />
+                    </main>
+                  </div>
+                } />
+                <Route path="register" element={
+                  <div className="bg-gray-50 min-h-screen">
+                    <Header />
+                    <main className="container mx-auto px-4 py-8">
+                      <Register />
+                    </main>
+                  </div>
+                } />
+                <Route path="dashboard" element={
+                  <div className="bg-gray-50 min-h-screen">
+                    <Header />
+                    <main className="container mx-auto px-4 py-8">
+                      <ProtectedRoute>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    </main>
+                  </div>
+                } />
+              </Route>
+            ))}
           </Routes>
         </LanguageWrapper>
       </Router>
